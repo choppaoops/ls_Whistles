@@ -215,7 +215,7 @@ do
 		downloadContainer:AddButton("Interface\\AddOns\\ls_Whistles\\assets\\curseforge-64", L["CURSEFORGE"], CURSE_LINK)
 		downloadContainer:AddButton("Interface\\AddOns\\ls_Whistles\\assets\\wago-64", L["WAGO"], WAGO_LINK)
 
-		local changelogHeader = createHeader(panel, s_format("%s |H%s|h[|c%s%s|r]|h",  L["CHANGELOG"], CL_LINK, D.global.colors.addon:GetHex(), L["CHANGELOG_FULL"]))
+		local changelogHeader = createHeader(panel, s_format("%s |H%s|h[|c%s%s|r]|h", L["CHANGELOG"], CL_LINK, D.global.colors.addon:GetHex(), L["CHANGELOG_FULL"]))
 		changelogHeader:SetPoint("TOP", downloadContainer, "BOTTOM", 0, 8)
 		changelogHeader:SetPoint("LEFT")
 		changelogHeader:SetPoint("RIGHT")
@@ -461,7 +461,7 @@ do
 							type = "toggle",
 							name = L["CAST_VFX"],
 							width = 1.25,
-							disabled =  function()
+							disabled = function()
 								return not addon.ActionBars:IsInit()
 							end,
 							set = function(_, value)
@@ -475,7 +475,7 @@ do
 							type = "toggle",
 							name = L["SHORT_HOTKEY"],
 							width = 1.25,
-							disabled =  function()
+							disabled = function()
 								return not addon.ActionBars:IsInit()
 							end,
 							set = function(_, value)
@@ -490,7 +490,7 @@ do
 							type = "group",
 							name = L["DESATURATION"],
 							inline = true,
-							disabled =  function()
+							disabled = function()
 								return not addon.ActionBars:IsInit()
 							end,
 							get = function(info)
@@ -522,7 +522,7 @@ do
 							type = "group",
 							name = L["EQUIPPED_HIGHLIGHT"],
 							inline = true,
-							disabled =  function()
+							disabled = function()
 								return not addon.ActionBars:IsInit()
 							end,
 							get = function(info)
@@ -645,7 +645,7 @@ do
 							order = inc(2),
 							type = "toggle",
 							name = _G.ITEM_LEVEL_ABBR,
-							disabled =  function()
+							disabled = function()
 								return not addon.CharacterFrame:IsInit()
 							end,
 						},
@@ -653,7 +653,7 @@ do
 							order = inc(2),
 							type = "toggle",
 							name = UPGRADE_LEVEL,
-							disabled =  function()
+							disabled = function()
 								return not addon.CharacterFrame:IsInit()
 							end,
 						},
@@ -661,7 +661,7 @@ do
 							order = inc(2),
 							type = "toggle",
 							name = _G.AUCTION_CATEGORY_ITEM_ENHANCEMENT,
-							disabled =  function()
+							disabled = function()
 								return not addon.CharacterFrame:IsInit()
 							end,
 						},
@@ -838,7 +838,7 @@ do
 							order = inc(2),
 							type = "toggle",
 							name = _G.ITEM_LEVEL_ABBR,
-							disabled =  function()
+							disabled = function()
 								return not addon.InspectFrame:IsInit()
 							end,
 						},
@@ -846,7 +846,7 @@ do
 							order = inc(2),
 							type = "toggle",
 							name = UPGRADE_LEVEL,
-							disabled =  function()
+							disabled = function()
 								return not addon.InspectFrame:IsInit()
 							end,
 						},
@@ -854,7 +854,7 @@ do
 							order = inc(2),
 							type = "toggle",
 							name = _G.AUCTION_CATEGORY_ITEM_ENHANCEMENT,
-							disabled =  function()
+							disabled = function()
 								return not addon.InspectFrame:IsInit()
 							end,
 						},
@@ -868,7 +868,7 @@ do
 						return C.db.profile.micro_menu[info[#info]]
 					end,
 					args = {
-						enabled =  {
+						enabled = {
 							order = reset(2),
 							type = "toggle",
 							name = colorSettingThatReloads(_G.ENABLE),
@@ -885,7 +885,7 @@ do
 							end,
 						},
 						spacer_1 = createSpacer(inc(2)),
-						helptips =  {
+						helptips = {
 							order = inc(2),
 							type = "toggle",
 							name = _G.COMMUNITIES_NOTIFICATION_SETTINGS_DIALOG_SETTINGS_LABEL,
@@ -971,7 +971,7 @@ do
 						C.db.profile.game_menu[info[#info]] = value
 					end,
 					args = {
-						enabled =  {
+						enabled = {
 							order = reset(2),
 							type = "toggle",
 							name = colorSettingThatReloads(_G.ENABLE),

@@ -665,7 +665,7 @@ do
 
 				for i = 1, savedInstances + savedWorldBosses do
 					if i <= savedInstances then
-						local instanceName, _, instanceReset, difficultyID, _, _, _, _, _, difficultyName, numEncounters, encounterProgress  = GetSavedInstanceInfo(i)
+						local instanceName, _, instanceReset, difficultyID, _, _, _, _, _, difficultyName, numEncounters, encounterProgress = GetSavedInstanceInfo(i)
 						if instanceReset > 0 then
 							if not lockouts[instanceReset] then
 								lockouts[instanceReset] = {}
