@@ -861,13 +861,13 @@ function addon.ActionBars:UpdateFading(name)
 	local config = addon:GetActionBarConfigForBar(name)
 	if config.fade.enabled then
 		if config.fade.combat then
-			addon.Fader:WatchCombat(bar)
+			addon.Fader:WatchCombat(bar, config.fade.min_alpha)
 		else
 			addon.Fader:UnwatchCombat(bar)
 		end
 
 		if config.fade.target then
-			addon.Fader:WatchTarget(bar)
+			addon.Fader:WatchTarget(bar, config.fade.min_alpha)
 		else
 			addon.Fader:UnwatchTarget(bar)
 		end

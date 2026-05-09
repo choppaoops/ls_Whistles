@@ -53,23 +53,23 @@ end
 fader:SetScript("OnEvent", function(self, event)
 	if event == "PLAYER_REGEN_DISABLED" then
 		for object in next, combatObjects do
-			combatObjects[object] = true
+			combatObjects[object].inCombat = true
 
 			addon.Fader:UnwatchHover(object)
 		end
 	elseif event == "PLAYER_REGEN_ENABLED" then
-		for object in next, combatObjects do
-			combatObjects[object] = false
+		for object, data in next, combatObjects do
+			combatObjects[object].inCombat = false
 
 			if addon.Fader:CanHover(object) then
-				addon.Fader:WatchHover(object)
+				addon.Fader:WatchHover(object, data.minAlpha)
 			end
 		end
 	elseif event == "PLAYER_TARGET_CHANGED" or event == "PLAYER_FOCUS_CHANGED" then
 		if UnitExists("target") or UnitExists("focus") then
 			if not self.hasTarget then
 				for object in next, targetObjects do
-					targetObjects[object] = true
+					targetObjects[object].hasTarget = true
 
 					addon.Fader:UnwatchHover(object)
 				end
@@ -78,11 +78,11 @@ fader:SetScript("OnEvent", function(self, event)
 			end
 		else
 			if self.hasTarget or self.hasTarget == nil then
-				for object in next, targetObjects do
-					targetObjects[object] = false
+				for object, data in next, targetObjects do
+					targetObjects[object].hasTarget = false
 
 					if addon.Fader:CanHover(object) then
-						addon.Fader:WatchHover(object)
+						addon.Fader:WatchHover(object, data.minAlpha)
 					end
 				end
 
@@ -92,8 +92,11 @@ fader:SetScript("OnEvent", function(self, event)
 	end
 end)
 
-function addon.Fader:WatchCombat(object)
-	combatObjects[object] = InCombatLockdown()
+function addon.Fader:WatchCombat(object, minAlpha)
+	combatObjects[object] = {
+		inCombat = InCombatLockdown(),
+		minAlpha = minAlpha,
+	}
 
 	fader:RegisterEvent("PLAYER_REGEN_ENABLED")
 	fader:RegisterEvent("PLAYER_REGEN_DISABLED")
@@ -108,8 +111,11 @@ function addon.Fader:UnwatchCombat(object)
 	end
 end
 
-function addon.Fader:WatchTarget(object)
-	targetObjects[object] = UnitExists("target") or UnitExists("focus")
+function addon.Fader:WatchTarget(object, minAlpha)
+	targetObjects[object] = {
+		hasTarget = UnitExists("target") or UnitExists("focus"),
+		minAlpha = minAlpha,
+	}
 
 	fader:RegisterEvent("PLAYER_TARGET_CHANGED")
 	fader:RegisterEvent("PLAYER_FOCUS_CHANGED")
@@ -198,5 +204,5 @@ function addon.Fader:UnwatchHover(object)
 end
 
 function addon.Fader:CanHover(object)
-	return not (combatObjects[object] or targetObjects[object])
+	return not ((combatObjects[object] and combatObjects[object].inCombat) or (targetObjects[object] and targetObjects[object].hasTarget))
 end

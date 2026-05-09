@@ -1,5 +1,5 @@
 local _, addon = ...
-local C, D, L = addon.C, addon.D, addon.L
+local C, D, L, LEM = addon.C, addon.D, addon.L, addon.LibEditMode
 addon.Backpack = {}
 
 -- Lua
@@ -101,5 +101,150 @@ function addon.Backpack:Init()
 	MainMenuBarBackpackButton:HookScript("OnEvent", MainMenuBarBackpackButton.OnEventHook)
 	MainMenuBarBackpackButton:RegisterEvent("TOKEN_MARKET_PRICE_UPDATED")
 
+	LEM:RegisterCallback("layout", function(layoutName)
+		-- AceDB takes care of layout table duplication
+		local layout = C.db.profile.backpack.layouts[layoutName]
+
+		addon.Backpack:UpdateFading()
+	end)
+
+	LEM:AddSystemSettings(Enum.EditModeSystem.Bags, {
+		{
+			name = L["FADING"],
+			kind = LEM.SettingType.Divider,
+			hidden = function()
+				return not C.db.global.settings.backpack.fade
+			end,
+		},
+		{
+			name = _G.ENABLE,
+			kind = LEM.SettingType.Checkbox,
+			hidden = function()
+				return not C.db.global.settings.backpack.fade
+			end,
+			default = D.profile.backpack.layouts["*"].fade.enabled,
+			get = function(layoutName)
+				return C.db.profile.backpack.layouts[layoutName].fade.enabled
+			end,
+			set = function(layoutName, value)
+				if C.db.profile.backpack.layouts[layoutName].fade.enabled ~= value then
+					C.db.profile.backpack.layouts[layoutName].fade.enabled = value
+
+					addon.Backpack:UpdateFading()
+				end
+			end,
+		},
+		{
+			name = _G.COMBAT,
+			desc = L["FADING_COMBAT_DESC"],
+			kind = LEM.SettingType.Checkbox,
+			hidden = function()
+				return not C.db.global.settings.backpack.fade
+			end,
+			disabled = function(layoutName)
+				return not C.db.profile.backpack.layouts[layoutName].fade.enabled
+			end,
+			default = D.profile.backpack.layouts["*"].fade.combat,
+			get = function(layoutName)
+				return C.db.profile.backpack.layouts[layoutName].fade.combat
+			end,
+			set = function(layoutName, value)
+				if C.db.profile.backpack.layouts[layoutName].fade.combat ~= value then
+					C.db.profile.backpack.layouts[layoutName].fade.combat = value
+
+					addon.Backpack:UpdateFading()
+				end
+			end,
+		},
+		{
+			name = _G.TARGET,
+			desc = L["FADING_TARGET_DESC"],
+			kind = LEM.SettingType.Checkbox,
+			hidden = function()
+				return not C.db.global.settings.backpack.fade
+			end,
+			disabled = function(layoutName)
+				return not C.db.profile.backpack.layouts[layoutName].fade.enabled
+			end,
+			default = D.profile.backpack.layouts["*"].fade.target,
+			get = function(layoutName)
+				return C.db.profile.backpack.layouts[layoutName].fade.target
+			end,
+			set = function(layoutName, value)
+				if C.db.profile.backpack.layouts[layoutName].fade.target ~= value then
+					C.db.profile.backpack.layouts[layoutName].fade.target = value
+
+					addon.Backpack:UpdateFading()
+				end
+			end,
+		},
+		{
+			name = L["MIN_ALPHA"],
+			kind = LEM.SettingType.Slider,
+			hidden = function()
+				return not C.db.global.settings.backpack.fade
+			end,
+			disabled = function(layoutName)
+				return not C.db.profile.backpack.layouts[layoutName].fade.enabled
+			end,
+			default = D.profile.backpack.layouts["*"].fade.min_alpha,
+			get = function(layoutName)
+				return C.db.profile.backpack.layouts[layoutName].fade.min_alpha
+			end,
+			set = function(layoutName, value)
+				if C.db.profile.backpack.layouts[layoutName].fade.min_alpha ~= value then
+					C.db.profile.backpack.layouts[layoutName].fade.min_alpha = value
+
+					addon.Backpack:UpdateFading()
+				end
+			end,
+			formatter = function(value)
+				return _G.PERCENTAGE_STRING:format(value * 100)
+			end,
+			minValue = 0,
+			maxValue = 1,
+			valueStep = 0.05,
+		},
+		{
+			name = "DNT Fade Settings Expander",
+			kind = LEM.SettingType.Expander,
+			expandedLabel = L["COLLAPSE_OPTIONS"],
+			collapsedLabel = L["FADING"],
+			appendArrow = true,
+			default = D.global.settings["**"].fade,
+			get = function()
+				return C.db.global.settings.backpack.fade
+			end,
+			set = function(_, value)
+				C.db.global.settings.backpack.fade = value
+			end,
+		},
+	})
+
 	isInit = true
+end
+
+function addon.Backpack:UpdateFading()
+	local config = addon:GetBackpackLayout()
+	if config.fade.enabled then
+		if config.fade.combat then
+			addon.Fader:WatchCombat(BagsBar, config.fade.min_alpha)
+		else
+			addon.Fader:UnwatchCombat(BagsBar)
+		end
+
+		if config.fade.target then
+			addon.Fader:WatchTarget(BagsBar, config.fade.min_alpha)
+		else
+			addon.Fader:UnwatchTarget(BagsBar)
+		end
+
+		if addon.Fader:CanHover(BagsBar) then
+			addon.Fader:WatchHover(BagsBar, config.fade.min_alpha)
+		end
+	else
+		addon.Fader:UnwatchCombat(BagsBar)
+		addon.Fader:UnwatchTarget(BagsBar)
+		addon.Fader:UnwatchHover(BagsBar)
+	end
 end

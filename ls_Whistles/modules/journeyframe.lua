@@ -303,6 +303,9 @@ function addon.JourneyFrame:Init()
 				button.JourneyCardProgressBar.JourneyCardProgressBarBG:SetAllPoints()
 				button.JourneyCardProgressBar.JourneyCardProgressBarBG:SetTexelSnappingBias(0)
 				button.JourneyCardProgressBar.JourneyCardProgressBarBG:SetSnapToPixelGrid(false)
+				button.JourneyCardProgressBar.JourneyCardProgressBarFrame:SetAllPoints()
+				button.JourneyCardProgressBar.JourneyCardProgressBarFrame:SetTexelSnappingBias(0)
+				button.JourneyCardProgressBar.JourneyCardProgressBarFrame:SetSnapToPixelGrid(false)
 
 				button.LockFrame:SetPoint("TOPRIGHT", -10, -10)
 
@@ -436,7 +439,7 @@ function addon.JourneyFrame:Init()
 			self.ProgressDetailsFrame.JourneyLevel:SetText(level)
 			self.ProgressDetailsFrame.JourneyLevelProgress:SetText(_G.JOURNEYS_CURRENT_PROGRESS:format(cur, max))
 
-			if not C_MajorFactions.ShouldUseJourneyRewardTrack(data.factionID)  then
+			if not C_MajorFactions.ShouldUseJourneyRewardTrack(data.factionID) then
 				self.DelveRewardProgressBar:Hide()
 			else
 				self.DelveRewardProgressBar:SetMinMaxValues(0, max)

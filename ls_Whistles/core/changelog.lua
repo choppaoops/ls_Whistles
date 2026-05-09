@@ -6,15 +6,14 @@ local _G = getfenv(0)
 
 -- Mine
 addon.CHANGELOG = [[
-### Action Bars
+- Added 12.0.5 support.
+- Fixed combat and target fading. It finally works and doesn't just throw a bunch of errors.
 
-- Added a set of options to adjust the usable equipment highlight. It's the green highlight you see for usable trinkets and stuff like that. Can be found in the advanced options.
+### Backpack
 
-### Adventure Guide
+- Added fading. Can be accessed via edit mode.
 
-- Fixed an issue where opening the suggested content frame while in combat could result in an error.
+### Menu
 
-### Character Frame
-
-- Fixed an issue where ilvl colouring wouldn't apply on the initial login.
+- Added fading. Can be accessed via edit mode.
 ]]
