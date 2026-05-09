@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## Version 120005.01
+
+- Added 12.0.5 support.
+- Fixed combat and target fading. It finally works and doesn't just throw a bunch of errors.
+
+### Backpack
+
+- Added fading. Can be accessed via edit mode.
+
+### Menu
+
+- Added fading. Can be accessed via edit mode.
+
 ## Version 120001.02
 
 ### Action Bars
