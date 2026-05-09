@@ -17,6 +17,10 @@ function addon:GetDefaultActionBarLayout()
 	return C.db.profile.actionbars.layouts["*"]
 end
 
+function addon:GetMicroMenuLayout()
+	return C.db.profile.micro_menu.layouts[LEM:GetActiveLayoutName() or "Modern"]
+end
+
 local function rgb(...)
 	return addon:CreateColor(...)
 end
@@ -169,9 +173,29 @@ D.profile = {
 			-- help = {
 			-- },
 		},
+		layouts = {
+			["*"] = { -- layout
+				fade = {
+					enabled = false,
+					combat = false,
+					target = false,
+					min_alpha = 0.25,
+				},
+			},
+		},
 	},
 	backpack = {
 		enabled = false,
+		layouts = {
+			["*"] = { -- layout
+				fade = {
+					enabled = false,
+					combat = false,
+					target = false,
+					min_alpha = 0.25,
+				},
+			},
+		},
 	},
 	suggest_frame = {
 		enabled = false,
