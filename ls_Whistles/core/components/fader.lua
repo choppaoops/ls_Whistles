@@ -81,7 +81,6 @@ fader:SetScript("OnEvent", function(self, event)
 				for object, data in next, targetObjects do
 					targetObjects[object].hasTarget = false
 
-
 					if addon.Fader:CanHover(object) then
 						addon.Fader:WatchHover(object, data.minAlpha)
 					end
