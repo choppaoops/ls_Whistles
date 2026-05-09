@@ -983,117 +983,117 @@ function addon.MicroMenu:Init()
 	end)
 
 	LEM:AddSystemSettings(Enum.EditModeSystem.MicroMenu, {
-	{
-		name = L["FADING"],
-		kind = LEM.SettingType.Divider,
-		hidden = function()
-			return not C.db.global.settings.micro_menu.fade
-		end,
-	},
-	{
-		name = _G.ENABLE,
-		kind = LEM.SettingType.Checkbox,
-		hidden = function()
-			return not C.db.global.settings.micro_menu.fade
-		end,
-		default = D.profile.micro_menu.layouts["*"].fade.enabled,
-		get = function(layoutName)
-			return C.db.profile.micro_menu.layouts[layoutName].fade.enabled
-		end,
-		set = function(layoutName, value)
-			if C.db.profile.micro_menu.layouts[layoutName].fade.enabled ~= value then
-				C.db.profile.micro_menu.layouts[layoutName].fade.enabled = value
+		{
+			name = L["FADING"],
+			kind = LEM.SettingType.Divider,
+			hidden = function()
+				return not C.db.global.settings.micro_menu.fade
+			end,
+		},
+		{
+			name = _G.ENABLE,
+			kind = LEM.SettingType.Checkbox,
+			hidden = function()
+				return not C.db.global.settings.micro_menu.fade
+			end,
+			default = D.profile.micro_menu.layouts["*"].fade.enabled,
+			get = function(layoutName)
+				return C.db.profile.micro_menu.layouts[layoutName].fade.enabled
+			end,
+			set = function(layoutName, value)
+				if C.db.profile.micro_menu.layouts[layoutName].fade.enabled ~= value then
+					C.db.profile.micro_menu.layouts[layoutName].fade.enabled = value
 
-				addon.MicroMenu:UpdateFading()
-			end
-		end,
-	},
-	{
-		name = _G.COMBAT,
-		desc = L["FADING_COMBAT_DESC"],
-		kind = LEM.SettingType.Checkbox,
-		hidden = function()
-			return not C.db.global.settings.micro_menu.fade
-		end,
-		disabled = function(layoutName)
-			return not C.db.profile.micro_menu.layouts[layoutName].fade.enabled
-		end,
-		default = D.profile.micro_menu.layouts["*"].fade.combat,
-		get = function(layoutName)
-			return C.db.profile.micro_menu.layouts[layoutName].fade.combat
-		end,
-		set = function(layoutName, value)
-			if C.db.profile.micro_menu.layouts[layoutName].fade.combat ~= value then
-				C.db.profile.micro_menu.layouts[layoutName].fade.combat = value
+					addon.MicroMenu:UpdateFading()
+				end
+			end,
+		},
+		{
+			name = _G.COMBAT,
+			desc = L["FADING_COMBAT_DESC"],
+			kind = LEM.SettingType.Checkbox,
+			hidden = function()
+				return not C.db.global.settings.micro_menu.fade
+			end,
+			disabled = function(layoutName)
+				return not C.db.profile.micro_menu.layouts[layoutName].fade.enabled
+			end,
+			default = D.profile.micro_menu.layouts["*"].fade.combat,
+			get = function(layoutName)
+				return C.db.profile.micro_menu.layouts[layoutName].fade.combat
+			end,
+			set = function(layoutName, value)
+				if C.db.profile.micro_menu.layouts[layoutName].fade.combat ~= value then
+					C.db.profile.micro_menu.layouts[layoutName].fade.combat = value
 
-				addon.MicroMenu:UpdateFading()
-			end
-		end,
-	},
-	{
-		name = _G.TARGET,
-		desc = L["FADING_TARGET_DESC"],
-		kind = LEM.SettingType.Checkbox,
-		hidden = function()
-			return not C.db.global.settings.micro_menu.fade
-		end,
-		disabled = function(layoutName)
-			return not C.db.profile.micro_menu.layouts[layoutName].fade.enabled
-		end,
-		default = D.profile.micro_menu.layouts["*"].fade.target,
-		get = function(layoutName)
-			return C.db.profile.micro_menu.layouts[layoutName].fade.target
-		end,
-		set = function(layoutName, value)
-			if C.db.profile.micro_menu.layouts[layoutName].fade.target ~= value then
-				C.db.profile.micro_menu.layouts[layoutName].fade.target = value
+					addon.MicroMenu:UpdateFading()
+				end
+			end,
+		},
+		{
+			name = _G.TARGET,
+			desc = L["FADING_TARGET_DESC"],
+			kind = LEM.SettingType.Checkbox,
+			hidden = function()
+				return not C.db.global.settings.micro_menu.fade
+			end,
+			disabled = function(layoutName)
+				return not C.db.profile.micro_menu.layouts[layoutName].fade.enabled
+			end,
+			default = D.profile.micro_menu.layouts["*"].fade.target,
+			get = function(layoutName)
+				return C.db.profile.micro_menu.layouts[layoutName].fade.target
+			end,
+			set = function(layoutName, value)
+				if C.db.profile.micro_menu.layouts[layoutName].fade.target ~= value then
+					C.db.profile.micro_menu.layouts[layoutName].fade.target = value
 
-				addon.MicroMenu:UpdateFading()
-			end
-		end,
-	},
-	{
-		name = L["MIN_ALPHA"],
-		kind = LEM.SettingType.Slider,
-		hidden = function()
-			return not C.db.global.settings.micro_menu.fade
-		end,
-		disabled = function(layoutName)
-			return not C.db.profile.micro_menu.layouts[layoutName].fade.enabled
-		end,
-		default = D.profile.micro_menu.layouts["*"].fade.min_alpha,
-		get = function(layoutName)
-			return C.db.profile.micro_menu.layouts[layoutName].fade.min_alpha
-		end,
-		set = function(layoutName, value)
-			if C.db.profile.micro_menu.layouts[layoutName].fade.min_alpha ~= value then
-				C.db.profile.micro_menu.layouts[layoutName].fade.min_alpha = value
+					addon.MicroMenu:UpdateFading()
+				end
+			end,
+		},
+		{
+			name = L["MIN_ALPHA"],
+			kind = LEM.SettingType.Slider,
+			hidden = function()
+				return not C.db.global.settings.micro_menu.fade
+			end,
+			disabled = function(layoutName)
+				return not C.db.profile.micro_menu.layouts[layoutName].fade.enabled
+			end,
+			default = D.profile.micro_menu.layouts["*"].fade.min_alpha,
+			get = function(layoutName)
+				return C.db.profile.micro_menu.layouts[layoutName].fade.min_alpha
+			end,
+			set = function(layoutName, value)
+				if C.db.profile.micro_menu.layouts[layoutName].fade.min_alpha ~= value then
+					C.db.profile.micro_menu.layouts[layoutName].fade.min_alpha = value
 
-				addon.MicroMenu:UpdateFading()
-			end
-		end,
-		formatter = function(value)
-			return _G.PERCENTAGE_STRING:format(value * 100)
-		end,
-		minValue = 0,
-		maxValue = 1,
-		valueStep = 0.05,
-	},
-	{
-		name = "DNT Fade Settings Expander",
-		kind = LEM.SettingType.Expander,
-		expandedLabel = L["COLLAPSE_OPTIONS"],
-		collapsedLabel = L["FADING"],
-		appendArrow = true,
-		default = D.global.settings["**"].fade,
-		get = function()
-			return C.db.global.settings.micro_menu.fade
-		end,
-		set = function(_, value)
-			C.db.global.settings.micro_menu.fade = value
-		end,
-	},
-})
+					addon.MicroMenu:UpdateFading()
+				end
+			end,
+			formatter = function(value)
+				return _G.PERCENTAGE_STRING:format(value * 100)
+			end,
+			minValue = 0,
+			maxValue = 1,
+			valueStep = 0.05,
+		},
+		{
+			name = "DNT Fade Settings Expander",
+			kind = LEM.SettingType.Expander,
+			expandedLabel = L["COLLAPSE_OPTIONS"],
+			collapsedLabel = L["FADING"],
+			appendArrow = true,
+			default = D.global.settings["**"].fade,
+			get = function()
+				return C.db.global.settings.micro_menu.fade
+			end,
+			set = function(_, value)
+				C.db.global.settings.micro_menu.fade = value
+			end,
+		},
+	})
 
 	isInit = true
 end
