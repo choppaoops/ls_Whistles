@@ -178,6 +178,8 @@ read_globals = {
 	"IsFishingLoot",
 	"IsLFGDungeonJoinable",
 	"IsLoggedIn",
+	"IsMacClient",
+	"IsMetaKeyDown",
 	"IsModifiedClick",
 	"IsShiftKeyDown",
 	"Item",
