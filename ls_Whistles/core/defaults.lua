@@ -21,6 +21,10 @@ function addon:GetMicroMenuLayout()
 	return C.db.profile.micro_menu.layouts[LEM:GetActiveLayoutName() or "Modern"]
 end
 
+function addon:GetBackpackLayout()
+	return C.db.profile.backpack.layouts[LEM:GetActiveLayoutName() or "Modern"]
+end
+
 local function rgb(...)
 	return addon:CreateColor(...)
 end
