@@ -186,6 +186,8 @@ do
 	local ENCHANT_LINE = Enum.TooltipDataLineType.ItemEnchantmentPermanent
 	local ENCHANT_PATTERN = _G.ENCHANTED_TOOLTIP_LINE:gsub("%%s", "(.+)")
 	local ENCHANT_QUALITY_PATTERN = "|A.+|a"
+	local CRAFTING_QUALITY_LINE = Enum.TooltipDataLineType.ProfessionCraftingQuality
+	local CRAFTING_QUALITY_PATTERN = "(|A:.-:)"
 	local GEM_LINE = Enum.TooltipDataLineType.GemSocket
 	local SOCKET_TEMPLATE = "Interface\\ItemSocketingFrame\\UI-EmptySocket-%s"
 
@@ -194,13 +196,19 @@ do
 
 	function addon:GetDetailedItemInfo(itemLink)
 		if itemCache[itemLink] then
-			return itemCache[itemLink].ilvl, itemCache[itemLink].upgrade, itemCache[itemLink].enchant, itemCache[itemLink].gem1, itemCache[itemLink].gem2, itemCache[itemLink].gem3
+			return itemCache[itemLink].ilvl,
+				itemCache[itemLink].upgrade,
+				itemCache[itemLink].enchant,
+				itemCache[itemLink].craftingQuality,
+				itemCache[itemLink].gem1,
+				itemCache[itemLink].gem2,
+				itemCache[itemLink].gem3
 		end
 
 		local data = C_TooltipInfo.GetHyperlink(itemLink, nil, nil, true)
 		if not data then return nil, nil, nil, nil, nil, nil end
 
-		local ilvl, upgrade, enchant, gems, gemIndex = nil, nil, nil, {}, 1
+		local ilvl, upgrade, enchant, craftingQuality, gems, gemIndex = nil, nil, nil, nil, {}, 1
 		for _, line in next, data.lines do
 			if line.type == ILVL_LINE then
 				ilvl = line.leftText:match(ILVL_PATTERN)
@@ -231,6 +239,11 @@ do
 				end
 
 				gemIndex = gemIndex + 1
+			elseif line.type == CRAFTING_QUALITY_LINE then
+				craftingQuality = line.leftText:match(CRAFTING_QUALITY_PATTERN)
+				if craftingQuality then
+					craftingQuality = craftingQuality:trim() .. "16:16:0:-1|a"
+				end
 			end
 		end
 
@@ -240,12 +253,13 @@ do
 			ilvl = ilvl,
 			upgrade = upgrade,
 			enchant = enchant,
+			craftingQuality = craftingQuality,
 			gem1 = gems[1],
 			gem2 = gems[2],
 			gem3 = gems[3],
 		}
 
-		return ilvl, upgrade, enchant, gems[1], gems[2], gems[3]
+		return ilvl, upgrade, enchant, craftingQuality, gems[1], gems[2], gems[3]
 	end
 
 	local wipeTimer

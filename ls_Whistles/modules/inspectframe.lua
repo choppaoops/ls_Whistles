@@ -30,7 +30,7 @@ local function updateSlot(button)
 		avgItemLevel = C_PaperDollInfo.GetInspectItemLevel(InspectFrame.unit)
 	end
 
-	local isOk, iLvl, upgrade, enchant, gem1, gem2, gem3 = scanSlot(button:GetID())
+	local isOk, iLvl, upgrade, enchant, craftingQuality, gem1, gem2, gem3 = scanSlot(button:GetID())
 	if isOk then
 		if C.db.profile.inspect_frame.ilvl then
 			button.ItemLevelText:SetText(iLvl)
@@ -55,7 +55,7 @@ local function updateSlot(button)
 		end
 
 		if C.db.profile.inspect_frame.upgrade then
-			button.UpgradeText:SetText(upgrade or "")
+			button.UpgradeText:SetText(upgrade or craftingQuality or "")
 		else
 			button.UpgradeText:SetText("")
 		end

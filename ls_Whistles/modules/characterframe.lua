@@ -79,7 +79,7 @@ local function updateSlot(button)
 		return
 	end
 
-	local isOk, iLvl, upgrade, enchant, gem1, gem2, gem3 = scanSlot(button:GetID())
+	local isOk, iLvl, upgrade, enchant, craftingQuality, gem1, gem2, gem3 = scanSlot(button:GetID())
 	if isOk then
 		if C.db.profile.character_frame.ilvl then
 			button.ItemLevelText:SetText(iLvl or "")
@@ -106,7 +106,7 @@ local function updateSlot(button)
 		end
 
 		if C.db.profile.character_frame.upgrade then
-			button.UpgradeText:SetText(upgrade or "")
+			button.UpgradeText:SetText(upgrade or craftingQuality or "")
 		else
 			button.UpgradeText:SetText("")
 		end
