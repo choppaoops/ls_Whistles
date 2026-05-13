@@ -267,7 +267,7 @@ do
 
 		supportContainer:MarkDirty()
 
-		local category = Settings.RegisterCanvasLayoutCategory(panel, L["LS_WHISTLES"])
+		local category = Settings.RegisterCanvasLayoutCategory(panel, L["LS_ADDON"])
 
 		Settings.RegisterAddOnCategory(category)
 
@@ -370,7 +370,7 @@ do
 	function addon:CreateAceConfig()
 		C.options = {
 			type = "group",
-			name = s_format("%s |cffcacaca(%s)|r", L["LS_WHISTLES"], addon.VER.string),
+			name = s_format("%s |cffcacaca(%s)|r", L["LS_ADDON"], addon.VER.string),
 			childGroups = "tab",
 			args = {
 				mail = {

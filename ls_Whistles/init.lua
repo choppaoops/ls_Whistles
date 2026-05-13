@@ -41,7 +41,7 @@ addon:RegisterEvent("ADDON_LOADED", function(arg1)
 	addon:CreateBlizzConfig()
 
 	AddonCompartmentFrame:RegisterAddon({
-		text = L["LS_WHISTLES"],
+		text = L["LS_ADDON"],
 		icon = "Interface\\AddOns\\ls_Whistles\\assets\\logo-32",
 		func = function()
 			if IsShiftKeyDown() then
