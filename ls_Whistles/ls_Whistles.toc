@@ -6,6 +6,8 @@
 ## IconTexture: Interface\AddOns\ls_Whistles\assets\logo-64
 ## SavedVariables: LS_WHISTLES_GLOBAL_CONFIG
 
+## X-Curse-Project-ID: 1438801
+
 embeds\_embeds.xml
 core\_core.xml
 locales\_locales.xml
