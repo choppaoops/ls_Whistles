@@ -975,12 +975,18 @@ function addon.MicroMenu:Init()
 		hideHelpTips(HelpTip)
 	end
 
-	LEM:RegisterCallback("layout", function(layoutName)
+	local function layoutCallback(layoutName)
 		-- AceDB takes care of layout table duplication
 		local layout = C.db.profile.micro_menu.layouts[layoutName]
 
 		addon.MicroMenu:UpdateFading()
-	end)
+	end
+
+	function addon.MicroMenu:UpdateLayoutSettings()
+		layoutCallback(LEM:GetActiveLayoutName())
+	end
+
+	LEM:RegisterCallback("layout", layoutCallback)
 
 	LEM:AddSystemSettings(Enum.EditModeSystem.MicroMenu, {
 		{
@@ -1132,4 +1138,8 @@ function addon.MicroMenu:UpdateFading()
 		addon.Fader:UnwatchTarget(MicroMenu)
 		addon.Fader:UnwatchHover(MicroMenu)
 	end
+end
+
+-- a stub
+function addon.MicroMenu:UpdateLayoutSettings()
 end

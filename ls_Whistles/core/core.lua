@@ -4,12 +4,14 @@ local _, addon = ...
 local _G = getfenv(0)
 local error = _G.error
 local next= _G.next
+local pairs = _G.pairs
 local pcall = _G.pcall
 local s_format = _G.string.format
+local setmetatable = _G.setmetatable
 local t_insert = _G.table.insert
-local type = _G.type
 local t_wipe = _G.table.wipe
 local tonumber = _G.tonumber
+local type = _G.type
 
 -- Mine
 local C, D, L = {}, {}, {}
@@ -61,6 +63,69 @@ do
 
 			if #funcs == 0 then
 				dispatcher:UnregisterEvent(event)
+			end
+		end
+	end
+end
+
+------------
+-- TABLES --
+------------
+
+function addon:CopyTable(src, dest, ignore)
+	if type(dest) ~= "table" then
+		dest = {}
+	end
+
+	for k, v in next, src do
+		if not ignore or not ignore[k] then
+			if type(v) == "table" then
+				dest[k] = self:CopyTable(v, dest[k])
+			else
+				dest[k] = v
+			end
+		end
+	end
+
+	return dest
+end
+
+-- a copy of removeDefaults from AceDB-3.0
+function addon:DiffTable(dest, src, blocker)
+	setmetatable(dest, nil)
+
+	for k, v in pairs(src) do
+		if k == "*" or k == "**" then
+			if type(v) == "table" then
+				for key, value in pairs(dest) do
+					if type(value) == "table" then
+						if src[key] == nil and (not blocker or blocker[key] == nil) then
+							addon:DiffTable(value, v)
+
+							if next(value) == nil then
+								dest[key] = nil
+							end
+						elseif k == "**" then
+							addon:DiffTable(value, v, src[key])
+						end
+					end
+				end
+			elseif k == "*" then
+				for key, value in pairs(dest) do
+					if src[key] == nil and v == value then
+						dest[key] = nil
+					end
+				end
+			end
+		elseif type(v) == "table" and type(dest[k]) == "table" then
+			addon:DiffTable(dest[k], v, blocker and blocker[k])
+
+			if next(dest[k]) == nil then
+				dest[k] = nil
+			end
+		else
+			if dest[k] == src[k] and (not blocker or blocker[k] == nil) then
+				dest[k] = nil
 			end
 		end
 	end
@@ -186,6 +251,8 @@ do
 	local ENCHANT_LINE = Enum.TooltipDataLineType.ItemEnchantmentPermanent
 	local ENCHANT_PATTERN = _G.ENCHANTED_TOOLTIP_LINE:gsub("%%s", "(.+)")
 	local ENCHANT_QUALITY_PATTERN = "|A.+|a"
+	local CRAFTING_QUALITY_LINE = Enum.TooltipDataLineType.ProfessionCraftingQuality
+	local CRAFTING_QUALITY_PATTERN = "(|A:.-:)"
 	local GEM_LINE = Enum.TooltipDataLineType.GemSocket
 	local SOCKET_TEMPLATE = "Interface\\ItemSocketingFrame\\UI-EmptySocket-%s"
 
@@ -194,13 +261,19 @@ do
 
 	function addon:GetDetailedItemInfo(itemLink)
 		if itemCache[itemLink] then
-			return itemCache[itemLink].ilvl, itemCache[itemLink].upgrade, itemCache[itemLink].enchant, itemCache[itemLink].gem1, itemCache[itemLink].gem2, itemCache[itemLink].gem3
+			return itemCache[itemLink].ilvl,
+				itemCache[itemLink].upgrade,
+				itemCache[itemLink].enchant,
+				itemCache[itemLink].craftingQuality,
+				itemCache[itemLink].gem1,
+				itemCache[itemLink].gem2,
+				itemCache[itemLink].gem3
 		end
 
 		local data = C_TooltipInfo.GetHyperlink(itemLink, nil, nil, true)
 		if not data then return nil, nil, nil, nil, nil, nil end
 
-		local ilvl, upgrade, enchant, gems, gemIndex = nil, nil, nil, {}, 1
+		local ilvl, upgrade, enchant, craftingQuality, gems, gemIndex = nil, nil, nil, nil, {}, 1
 		for _, line in next, data.lines do
 			if line.type == ILVL_LINE then
 				ilvl = line.leftText:match(ILVL_PATTERN)
@@ -231,6 +304,11 @@ do
 				end
 
 				gemIndex = gemIndex + 1
+			elseif line.type == CRAFTING_QUALITY_LINE then
+				craftingQuality = line.leftText:match(CRAFTING_QUALITY_PATTERN)
+				if craftingQuality then
+					craftingQuality = craftingQuality:trim() .. "16:16:0:-1|a"
+				end
 			end
 		end
 
@@ -240,12 +318,13 @@ do
 			ilvl = ilvl,
 			upgrade = upgrade,
 			enchant = enchant,
+			craftingQuality = craftingQuality,
 			gem1 = gems[1],
 			gem2 = gems[2],
 			gem3 = gems[3],
 		}
 
-		return ilvl, upgrade, enchant, gems[1], gems[2], gems[3]
+		return ilvl, upgrade, enchant, craftingQuality, gems[1], gems[2], gems[3]
 	end
 
 	local wipeTimer

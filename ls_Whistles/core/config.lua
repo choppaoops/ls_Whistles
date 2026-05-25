@@ -182,16 +182,11 @@ do
 		versionText:SetTextColor(0.4, 0.4, 0.4)
 		versionText:SetText(addon.VER.string)
 
-		-- UIPanelButtonTemplate
 		local configButton = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
 		configButton:SetText(_G.ADVANCED_OPTIONS)
 		configButton:SetWidth(configButton:GetTextWidth() + 18)
 		configButton:SetPoint("TOPRIGHT", -36, -16)
 		configButton:SetScript("OnClick", function()
-			if not addon.OpenAceConfig then
-				addon:CreateAceConfig()
-			end
-
 			addon:OpenAceConfig()
 		end)
 
@@ -266,10 +261,15 @@ do
 		changelog:SetText(addon.CHANGELOG)
 
 		supportContainer:MarkDirty()
+		downloadContainer:MarkDirty()
 
-		local category = Settings.RegisterCanvasLayoutCategory(panel, L["LS_WHISTLES"])
+		local category = Settings.RegisterCanvasLayoutCategory(panel, L["ADDON_NAME"])
 
 		Settings.RegisterAddOnCategory(category)
+
+		function addon:GetBlizzCategory()
+			return category
+		end
 
 		function addon:OpenBlizzConfig()
 			Settings.OpenToCategory(category:GetID())
@@ -367,10 +367,14 @@ do
 		end)
 	end
 
+	function addon:AskToReloadUI(...)
+		askToReloadUI(...)
+	end
+
 	function addon:CreateAceConfig()
 		C.options = {
 			type = "group",
-			name = s_format("%s |cffcacaca(%s)|r", L["LS_WHISTLES"], addon.VER.string),
+			name = s_format("%s |cffcacaca(%s)|r", L["ADDON_NAME"], addon.VER.string),
 			childGroups = "tab",
 			args = {
 				mail = {
@@ -554,7 +558,7 @@ do
 						footer = {
 							order = inc(2),
 							type = "description",
-							name = L["ACTIONBARS_DESC"],
+							name = L["ACTIONBARS_FOOTER"],
 							image = "Interface\\DialogFrame\\UI-Dialog-Icon-AlertNew",
 							imageWidth = 24,
 							imageHeight = 24,
@@ -960,6 +964,65 @@ do
 								},
 							},
 						},
+						spacer_4 = createSpacer(inc(2)),
+						footer = {
+							order = inc(2),
+							type = "description",
+							name = L["MICROMENU_FOOTER"],
+							image = "Interface\\DialogFrame\\UI-Dialog-Icon-AlertNew",
+							imageWidth = 24,
+							imageHeight = 24,
+						},
+					},
+				},
+				tooltips = {
+					order = inc(1),
+					type = "group",
+					name = _G.HUD_EDIT_MODE_SETTING_ENCOUNTER_EVENTS_TOOLTIPS,
+					get = function(info)
+						return C.db.profile.tooltips[info[#info]]
+					end,
+					set = function(info, value)
+						C.db.profile.tooltips[info[#info]] = value
+					end,
+					args = {
+						enabled = {
+							order = reset(2),
+							type = "toggle",
+							name = colorSettingThatReloads(_G.ENABLE),
+							get = function()
+								return C.db.profile.tooltips.enabled
+							end,
+							set = function(_, value)
+								C.db.profile.tooltips.enabled = value
+
+								if addon.GameMenu:IsInit() then
+									askToReloadUI("tooltips.enabled", value)
+								else
+									if value then
+										addon.Tooltips:Init()
+									end
+								end
+							end,
+						},
+						spacer_1 = createSpacer(inc(2)),
+						id = {
+							order = inc(2),
+							type = "toggle",
+							name = L["TOOLTIP_IDS"],
+							disabled = function()
+								return not addon.Tooltips:IsInit()
+							end,
+						},
+						count = {
+							order = inc(2),
+							type = "toggle",
+							name = L["ITEM_COUNT"],
+							desc = L["ITEM_COUNT_DESC"],
+							disabled = function()
+								return not (addon.Tooltips:IsInit() and C.db.profile.tooltips.id)
+							end,
+						},
 					},
 				},
 				game_menu = {
@@ -1010,10 +1073,49 @@ do
 
 		LibStub("AceConfig-3.0"):RegisterOptionsTable(addonName, C.options)
 
+		C.options.args.profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(C.db, true)
+		C.options.args.profiles.order = 100
+		C.options.args.profiles.inline = true
+		C.options.args.profiles.desc = nil
+		C.options.args.profiles.hidden = function()
+			return not SettingsPanel:IsShown()
+		end
+
+		C.options.args.profiles.plugins = {
+			[addonName] = {
+				spacer_1 = {
+					order = 100,
+					type = "description",
+					name = " ",
+				},
+				importexport = {
+					order = 110,
+					type = "execute",
+					name = s_format("%s / %s", L["IMPORT"], L["EXPORT"]),
+					func = addon.OpenImportExport,
+					width = "full",
+				},
+			},
+		}
+
+		ACD:AddToBlizOptions(addonName, C.options.args.profiles.name, addon:GetBlizzCategory():GetID(), "profiles")
+
+		local canShowPopup = true
+
+		SettingsPanel:HookScript("OnHide", function()
+			if canShowPopup then
+				shouldReloadUI()
+			end
+		end)
+
 		function addon:OpenAceConfig()
+			canShowPopup = false
+
 			if not InCombatLockdown() then
 				HideUIPanel(SettingsPanel)
 			end
+
+			canShowPopup = true
 
 			ACD:Open(addonName)
 

@@ -346,7 +346,7 @@ function addon.ActionBars:Init()
 
 	self:UpdateCastVFX()
 
-	LEM:RegisterCallback("layout", function(layoutName)
+	local function layoutCallback(layoutName)
 		-- AceDB takes care of layout table duplication
 		local layout = C.db.profile.actionbars.layouts[layoutName]
 
@@ -361,7 +361,13 @@ function addon.ActionBars:Init()
 			addon.ActionBars:UpdateArt(name)
 			addon.ActionBars:UpdateEndCaps()
 		end
-	end)
+	end
+
+	function addon.ActionBars:UpdateLayoutSettings()
+		layoutCallback(LEM:GetActiveLayoutName())
+	end
+
+	LEM:RegisterCallback("layout", layoutCallback)
 
 	for name, id in next, Enum.EditModeActionBarSystemIndices do
 		local barName = SYSTEMS[name]
@@ -917,4 +923,8 @@ function addon.ActionBars:ForAll(method)
 	for name in next, BARS do
 		self[method](self, name)
 	end
+end
+
+-- a stub
+function addon.ActionBars:UpdateLayoutSettings()
 end

@@ -1,10 +1,12 @@
 ## Interface: 120005
 ## Author: lightspark
-## Version: 120005.01
+## Version: 120005.02
 ## Title: LS: |cff1ca9c9Whistles|r
 ## Notes: Where are the bells tho?
 ## IconTexture: Interface\AddOns\ls_Whistles\assets\logo-64
 ## SavedVariables: LS_WHISTLES_GLOBAL_CONFIG
+
+## X-Curse-Project-ID: 1438801
 
 embeds\_embeds.xml
 core\_core.xml

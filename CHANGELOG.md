@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## Version 120005.02
+
+- Added profile import/export. Available at the "Profiles" tabs in Blizz config panel.
+
+### Character & Inspect Frames
+
+- The "Upgrade Level" option now also handles crafted items' quality.
+
+### Tooltips
+
+- Added the submodule. For now it's just item/spell ID and item count info.
+
 ## Version 120005.01
 
 - Added 12.0.5 support.
