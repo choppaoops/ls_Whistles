@@ -204,4 +204,9 @@ D.profile = {
 	suggest_frame = {
 		enabled = false,
 	},
+	tooltips = {
+		enabled = true,
+		count = true,
+		id = true,
+	},
 }

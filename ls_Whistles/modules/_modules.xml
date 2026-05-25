@@ -9,4 +9,5 @@
 	<Script file="mail.lua"/>
 	<Script file="micromenu.lua"/>
 	<Script file="suggestframe.lua"/>
+	<Script file="tooltips.lua"/>
 </Ui>

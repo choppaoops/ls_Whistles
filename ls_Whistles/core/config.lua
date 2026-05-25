@@ -975,6 +975,56 @@ do
 						},
 					},
 				},
+				tooltips = {
+					order = inc(1),
+					type = "group",
+					name = _G.HUD_EDIT_MODE_SETTING_ENCOUNTER_EVENTS_TOOLTIPS,
+					get = function(info)
+						return C.db.profile.tooltips[info[#info]]
+					end,
+					set = function(info, value)
+						C.db.profile.tooltips[info[#info]] = value
+					end,
+					args = {
+						enabled = {
+							order = reset(2),
+							type = "toggle",
+							name = colorSettingThatReloads(_G.ENABLE),
+							get = function()
+								return C.db.profile.tooltips.enabled
+							end,
+							set = function(_, value)
+								C.db.profile.tooltips.enabled = value
+
+								if addon.GameMenu:IsInit() then
+									askToReloadUI("tooltips.enabled", value)
+								else
+									if value then
+										addon.Tooltips:Init()
+									end
+								end
+							end,
+						},
+						spacer_1 = createSpacer(inc(2)),
+						id = {
+							order = inc(2),
+							type = "toggle",
+							name = L["TOOLTIP_IDS"],
+							disabled = function()
+								return not addon.Tooltips:IsInit()
+							end,
+						},
+						count = {
+							order = inc(2),
+							type = "toggle",
+							name = L["ITEM_COUNT"],
+							desc = L["ITEM_COUNT_DESC"],
+							disabled = function()
+								return not (addon.Tooltips:IsInit() and C.db.profile.tooltips.id)
+							end,
+						},
+					},
+				},
 				game_menu = {
 					order = inc(1),
 					type = "group",

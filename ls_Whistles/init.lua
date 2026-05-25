@@ -53,6 +53,7 @@ addon:RegisterEvent("ADDON_LOADED", function(arg1)
 	addon.Mail:Init()
 	addon.MicroMenu:Init()
 	addon.SuggestFrame:Init()
+	addon.Tooltips:Init()
 
 	addon:CreateImportExport()
 	addon:CreateBlizzConfig()
