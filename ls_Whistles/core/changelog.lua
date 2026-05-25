@@ -6,14 +6,13 @@ local _G = getfenv(0)
 
 -- Mine
 addon.CHANGELOG = [[
-- Added 12.0.5 support.
-- Fixed combat and target fading. It finally works and doesn't just throw a bunch of errors.
+- Added profile import/export. Available at the "Profiles" tabs in Blizz config panel.
 
-### Backpack
+### Character & Inspect Frames
 
-- Added fading. Can be accessed via edit mode.
+- The "Upgrade Level" option now also handles crafted items' quality.
 
-### Menu
+### Tooltips
 
-- Added fading. Can be accessed via edit mode.
+- Added the submodule. For now it's just item/spell ID and item count info.
 ]]
