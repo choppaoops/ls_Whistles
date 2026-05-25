@@ -13,6 +13,18 @@ addon.VER.number = tonumber(addon.VER.string:gsub("%D", ""), nil)
 
 addon.PLAYER_CLASS = UnitClassBase("player")
 
+local function updateCallback()
+	addon.ActionBars:UpdateLayoutSettings()
+	addon.Backpack:UpdateLayoutSettings()
+	addon.MicroMenu:UpdateLayoutSettings()
+
+	addon:AskToReloadUI("profile")
+end
+
+local function shutdownCallback()
+	C.db.profile.version = addon.VER.number
+end
+
 addon:RegisterEvent("ADDON_LOADED", function(arg1)
 	if arg1 ~= addonName then return end
 
@@ -25,6 +37,11 @@ addon:RegisterEvent("ADDON_LOADED", function(arg1)
 	end
 
 	C.db = LibStub("AceDB-3.0"):New("LS_WHISTLES_GLOBAL_CONFIG", D, true)
+	C.db:RegisterCallback("OnProfileChanged", updateCallback)
+	C.db:RegisterCallback("OnProfileCopied", updateCallback)
+	C.db:RegisterCallback("OnProfileReset", updateCallback)
+	C.db:RegisterCallback("OnProfileShutdown", shutdownCallback)
+	C.db:RegisterCallback("OnDatabaseShutdown", shutdownCallback)
 
 	addon.ActionBars:Init()
 	addon.Backpack:Init()
@@ -37,18 +54,15 @@ addon:RegisterEvent("ADDON_LOADED", function(arg1)
 	addon.MicroMenu:Init()
 	addon.SuggestFrame:Init()
 
-	addon:CreateAceConfig()
+	addon:CreateImportExport()
 	addon:CreateBlizzConfig()
+	addon:CreateAceConfig()
 
 	AddonCompartmentFrame:RegisterAddon({
-		text = L["LS_ADDON"],
+		text = L["ADDON_NAME"],
 		icon = "Interface\\AddOns\\ls_Whistles\\assets\\logo-32",
 		func = function()
 			if IsShiftKeyDown() then
-				if not addon.OpenAceConfig then
-					addon:CreateAceConfig()
-				end
-
 				addon:OpenAceConfig()
 			else
 				addon:OpenBlizzConfig()

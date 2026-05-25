@@ -9,13 +9,14 @@ exclude_files = {
 }
 
 ignore = {
-	"111",
-	"112",
-	"122",
+	"111/LS.*", -- Setting an undefined global variable starting with LS
+	"112/LS.*", -- Mutating an undefined global variable starting with LS
+	"113/LS.*", -- Accessing an undefined global variable starting with LS
 	"211/_G", -- Unused local variable _G
 	"211/C",  -- Unused local variable C
 	"211/D",  -- Unused local variable D
 	"211/L",  -- Unused local variable L
+	"432", -- Shadowing an upvalue argument
 }
 
 globals = {
@@ -30,6 +31,7 @@ globals = {
 read_globals = {
 	"ActionBarActionEventsFrame",
 	"ActionStatus",
+	"ActionStatus_DisplayMessage",
 	"AddonCompartmentFrame",
 	"BagsBar",
 	"BreakUpLargeNumbers",
@@ -39,6 +41,7 @@ read_globals = {
 	"C_AdventureJournal",
 	"C_CurrencyInfo",
 	"C_CurveUtil",
+	"C_EncodingUtil",
 	"C_Item",
 	"C_LevelLink",
 	"C_Mail",
@@ -106,6 +109,7 @@ read_globals = {
 	"GetAverageItemLevel",
 	"GetBindingKey",
 	"GetBindingText",
+	"GetClientDisplayExpansionLevel",
 	"GetCursorPosition",
 	"GetCVarBool",
 	"GetEJTierData",
@@ -199,6 +203,8 @@ read_globals = {
 	"MicroMenu",
 	"Mixin",
 	"nop",
+	"PanelTemplates_SetNumTabs",
+	"PanelTemplates_SetTab",
 	"PaperDollFrame",
 	"PaperDollInnerBorderBottom",
 	"PaperDollInnerBorderBottom2",
@@ -239,6 +245,7 @@ read_globals = {
 	"UIFrameFlash",
 	"UIFrameFlashStop",
 	"UIParent",
+	"UISpecialFrames",
 	"UnitClassBase",
 	"UnitExists",
 	"UnitGetAvailableRoles",

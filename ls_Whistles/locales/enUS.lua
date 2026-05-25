@@ -5,7 +5,7 @@ local C, D, L = addon.C, addon.D, addon.L
 local _G = getfenv(0)
 
 -- Mine
-L["LS_ADDON"] = ("LS: |c%sWhistles|r"):format(D.global.colors.addon:GetHex())
+L["ADDON_NAME"] = ("LS: |c%sWhistles|r"):format(D.global.colors.addon:GetHex())
 L["CURSEFORGE"] = "CurseForge"
 L["DISCORD"] = "Discord"
 L["GITHUB"] = "GitHub"
@@ -13,6 +13,8 @@ L["WAGO"] = "Wago"
 L["WOWINTERFACE"] = "WoWInterface"
 L["INFO"] = D.global.colors.addon:WrapTextInColorCode(_G.INFO)
 L["AC_TOOLTIP"] = ("|c%1$sClick:|r %2$s\n|c%1$sShift Click:|r %3$s"):format(D.global.colors.addon:GetHex(), _G.GAMEMENU_OPTIONS, _G.ADVANCED_OPTIONS)
+
+L["IMPORT"] = _G.HUD_EDIT_MODE_IMPORT_LAYOUT
 
 -- Require translation
 L["ACTIONBARS_DESC"] = "Adds bar fading and button text options for each individual action bar in Edit Mode."
@@ -67,3 +69,5 @@ L["SHORT_HOTKEY"] = "Short Key Bindings"
 L["SUPPORT_FEEDBACK"] = "Support & Feedback"
 L["TEXTURE"] = "Texture"
 L["WYVERN"] = "Wyvern"
+
+L["EXPORT"] = "Export"

@@ -101,12 +101,18 @@ function addon.Backpack:Init()
 	MainMenuBarBackpackButton:HookScript("OnEvent", MainMenuBarBackpackButton.OnEventHook)
 	MainMenuBarBackpackButton:RegisterEvent("TOKEN_MARKET_PRICE_UPDATED")
 
-	LEM:RegisterCallback("layout", function(layoutName)
+	local function layoutCallback(layoutName)
 		-- AceDB takes care of layout table duplication
 		local layout = C.db.profile.backpack.layouts[layoutName]
 
 		addon.Backpack:UpdateFading()
-	end)
+	end
+
+	function addon.Backpack:UpdateLayoutSettings()
+		layoutCallback(LEM:GetActiveLayoutName())
+	end
+
+	LEM:RegisterCallback("layout", layoutCallback)
 
 	LEM:AddSystemSettings(Enum.EditModeSystem.Bags, {
 		{
@@ -247,4 +253,8 @@ function addon.Backpack:UpdateFading()
 		addon.Fader:UnwatchTarget(BagsBar)
 		addon.Fader:UnwatchHover(BagsBar)
 	end
+end
+
+-- a stub
+function addon.Backpack:UpdateLayoutSettings()
 end
