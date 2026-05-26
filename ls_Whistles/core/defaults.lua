@@ -205,8 +205,8 @@ D.profile = {
 		enabled = false,
 	},
 	tooltips = {
-		enabled = true,
-		count = true,
-		id = true,
+		enabled = false,
+		count = false,
+		id = false,
 	},
 }
