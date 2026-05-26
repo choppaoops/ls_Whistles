@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Version 120005.03
+
+### Tooltips
+
+- Disabled the module by default.
+
 ## Version 120005.02
 
 - Added profile import/export. Available at the "Profiles" tabs in Blizz config panel.
