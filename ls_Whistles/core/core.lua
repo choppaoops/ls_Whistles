@@ -256,6 +256,21 @@ do
 	local GEM_LINE = Enum.TooltipDataLineType.GemSocket
 	local SOCKET_TEMPLATE = "Interface\\ItemSocketingFrame\\UI-EmptySocket-%s"
 
+	-- localised upgrade track name -> abbreviation; unmatched names fall back to a bare "X/Y"
+	local TRACK_ABBR = {
+		["Explorer"] = "E", ["Adventurer"] = "A", ["Veteran"] = "V", ["Champion"] = "C", ["Hero"] = "H", ["Myth"] = "M",
+		["探險者"] = "E", ["冒險者"] = "A", ["精兵"] = "V", ["勇士"] = "C", ["英雄"] = "H", ["神話"] = "M",
+	}
+	-- abbreviation -> hex colour (PranGearView's quality scale); previous-season gear stays grey
+	local TRACK_COLOR = {
+		E = "ffffff", A = "ffffff", -- white
+		V = "1eff00", -- green  (Uncommon)
+		C = "0070dd", -- blue   (Rare)
+		H = "a335ee", -- purple (Epic)
+		M = "ff8000", -- orange (Legendary)
+	}
+	local PREV_SEASON_HEX = "808080"
+
 	local dataCache = {}
 	local itemCache = {}
 
@@ -283,7 +298,29 @@ do
 			elseif line.type == UPGRADE_LINE then
 				upgrade = line.leftText:match(UPGRADE_PATTERN)
 				if upgrade then
-					upgrade = upgrade:trim()
+					local frac = upgrade:match("%d+/%d+")
+					if frac then
+						-- match the track name as a plain substring so stray colons/spaces don't matter
+						local abbr
+						for trackName, a in next, TRACK_ABBR do
+							if upgrade:find(trackName, 1, true) then
+								abbr = a
+								break
+							end
+						end
+
+						local label = abbr and (abbr .. " " .. frac) or frac
+
+						local hex
+						local lineHex = line.leftColor and line.leftColor:GenerateHexColorNoAlpha()
+						if lineHex and lineHex:lower() == PREV_SEASON_HEX then
+							hex = PREV_SEASON_HEX -- previous-season gear: keep grey
+						elseif abbr then
+							hex = TRACK_COLOR[abbr]
+						end
+
+						upgrade = hex and ("|cff" .. hex .. label .. "|r") or label
+					end
 				end
 			elseif line.type == ENCHANT_LINE then
 				enchant = line.leftText:match(ENCHANT_PATTERN)
@@ -291,6 +328,9 @@ do
 					enchant = enchant:gsub(ENCHANT_QUALITY_PATTERN, "")
 					if enchant then
 						enchant = enchant:trim()
+						if not enchant:find("^[%+%d]") then -- leave "+stat" enchants alone
+							enchant = enchant:gsub("^.- %- ", "") -- drop the "附魔戒指 - " slot prefix
+						end
 					end
 				end
 			elseif line.type == GEM_LINE then

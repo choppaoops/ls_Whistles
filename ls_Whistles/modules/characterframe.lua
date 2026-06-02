@@ -191,7 +191,6 @@ function addon.CharacterFrame:Init()
 		enchText:SetJustifyH(textOnRight and "LEFT" or "RIGHT")
 		enchText:SetJustifyV("TOP")
 		enchText:SetTextColor(0, 1, 0)
-		enchText:Hide()
 		slot.EnchantText = enchText
 
 		local enchIcon = slot:CreateTexture(nil, "OVERLAY", nil, 2)
@@ -218,7 +217,6 @@ function addon.CharacterFrame:Init()
 		upgradeText:SetFontObject("GameFontHighlightSmall")
 		upgradeText:SetSize(160, 0)
 		upgradeText:SetJustifyH(textOnRight and "LEFT" or "RIGHT")
-		upgradeText:Hide()
 		slot.UpgradeText = upgradeText
 
 		local iLvlText = slot:CreateFontString(nil, "OVERLAY")
@@ -365,20 +363,30 @@ function addon.CharacterFrame:Init()
 		end
 	end)
 
-	local isMouseOver
-	CharacterFrame:HookScript("OnUpdate", function()
-		local state = CharacterFrame:IsMouseOver()
-		if state ~= isMouseOver then
-			for button in next, EQUIP_SLOTS do
-				button.EnchantText:SetShown(state)
-				button.UpgradeText:SetShown(state)
-			end
+	hooksecurefunc("PaperDollItemSlotButton_Update", updateSlot)
 
-			isMouseOver = state
+	hooksecurefunc("PaperDollFrame_UpdateStats", function()
+		if not CharacterStatsPane then return end
+		if C_Secrets and C_Secrets.ShouldUnitStatsBeSecret and C_Secrets.ShouldUnitStatsBeSecret("player") then
+			return
+		end
+
+		-- secondary/tertiary stats: only the ones whose numericValue carries a fraction
+		-- (primary stats are whole numbers, so they're skipped and never get a ".00%")
+		for _, statFrame in next, {CharacterStatsPane:GetChildren()} do
+			if statFrame.Label and statFrame.Value and statFrame.numericValue then
+				if tostring(statFrame.numericValue):find("%.") then
+					statFrame.Value:SetFormattedText("%.2f%%", statFrame.numericValue)
+				end
+			end
+		end
+
+		-- average item level (equipped/effective value)
+		local ilvlFrame = CharacterStatsPane.ItemLevelFrame
+		if ilvlFrame and ilvlFrame.Value then
+			ilvlFrame.Value:SetFormattedText("%.2f", select(2, GetAverageItemLevel()))
 		end
 	end)
-
-	hooksecurefunc("PaperDollItemSlotButton_Update", updateSlot)
 
 	local function updateAverageItemLevel()
 		avgItemLevel = m_floor(select(2, GetAverageItemLevel()))

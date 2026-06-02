@@ -139,7 +139,6 @@ function addon.InspectFrame:Init()
 			enchText:SetJustifyH(textOnRight and "LEFT" or "RIGHT")
 			enchText:SetJustifyV("TOP")
 			enchText:SetTextColor(0, 1, 0)
-			enchText:Hide()
 			slot.EnchantText = enchText
 
 			local enchIcon = slot:CreateTexture(nil, "OVERLAY", nil, 2)
@@ -153,7 +152,6 @@ function addon.InspectFrame:Init()
 			upgradeText:SetFontObject("GameFontHighlightSmall")
 			upgradeText:SetSize(160, 0)
 			upgradeText:SetJustifyH(textOnRight and "LEFT" or "RIGHT")
-			upgradeText:Hide()
 			slot.UpgradeText = upgradeText
 
 			local iLvlText = slot:CreateFontString(nil, "ARTWORK")
@@ -247,23 +245,11 @@ function addon.InspectFrame:Init()
 			end
 		end)
 
-		local isMouseOver
-		InspectFrame:HookScript("OnUpdate", function()
-			local state = InspectFrame:IsMouseOver()
-			if state ~= isMouseOver then
-				for button in next, EQUIP_SLOTS do
-					button.EnchantText:SetShown(state)
-					button.UpgradeText:SetShown(state)
-				end
-
-				isMouseOver = state
-			end
-		end)
-
 		hooksecurefunc("InspectPaperDollItemSlotButton_Update", updateSlot)
 
+		local ilvlFormat = _G.DUNGEON_SCORE_LINK_ITEM_LEVEL:gsub("%%d", "%%.2f")
 		hooksecurefunc("InspectPaperDollFrame_SetLevel", function()
-			averageItemLevelText:SetFormattedText(_G.DUNGEON_SCORE_LINK_ITEM_LEVEL, C_PaperDollInfo.GetInspectItemLevel(InspectFrame.unit))
+			averageItemLevelText:SetFormattedText(ilvlFormat, C_PaperDollInfo.GetInspectItemLevel(InspectFrame.unit))
 		end)
 	end)
 
